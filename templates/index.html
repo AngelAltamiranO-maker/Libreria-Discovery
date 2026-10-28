@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery - Librería Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300 flex flex-col justify-between">
+
+    <div>
+        <!-- Navegación Superior -->
+        <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3 transition-colors">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-3 group">
+                    <div class="bg-brand-500 text-white p-2 rounded-xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-bold text-xl tracking-tight block leading-none text-slate-900 dark:text-white">Discovery</span>
+                        <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Librería Online</span>
+                    </div>
+                </a>
+
+                <!-- Menú Central -->
+                <div class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/50">
+                    <button onclick="switchTab('inicio')" id="btn-inicio" class="tab-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Inicio
+                    </button>
+                    <button onclick="switchTab('catalogo')" id="btn-catalogo" class="tab-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Catálogo
+                    </button>
+                    <button onclick="switchTab('nosotros')" id="btn-nosotros" class="tab-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Sobre Nosotros
+                    </button>
+                </div>
+
+                <!-- Acciones Derecha -->
+                <div class="flex items-center gap-3">
+                    <!-- Carrito -->
+                    <button onclick="openCartModal()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition relative">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cart-counter" class="absolute -top-1.5 -right-1.5 bg-brand-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
+                    </button>
+
+                    <!-- Modos Claro / Oscuro -->
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition">
+                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <!-- Control de Usuario (Sesión Activa o Iniciar Sesión) -->
+                    {% if session.get('usuario_nombre') %}
+                        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Hola, {{ session.get('usuario_nombre').split()[0] }}</span>
+                            <a href="/logout" class="text-xs text-rose-500 hover:underline font-semibold ml-1">Salir</a>
+                        </div>
+                    {% else %}
+                        <div class="flex items-center gap-2">
+                            <button onclick="document.getElementById('modal-login').classList.remove('hidden')" class="text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-500 px-3 py-2 transition">
+                                Iniciar Sesión
+                            </button>
+                            <button onclick="document.getElementById('modal-registro').classList.remove('hidden')" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-xs transition shadow-md shadow-brand-500/20">
+                                Registrarse
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <!-- Botón Opinión -->
+                    <button onclick="document.getElementById('modal-opinion').classList.remove('hidden')" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        + Opinión
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- BANNER HERO (Solo visible en Inicio) -->
+        <div id="section-hero" class="max-w-7xl mx-auto px-6 pt-8">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950 text-white p-8 md:p-14 shadow-2xl border border-slate-800">
+                <div class="max-w-2xl relative z-10">
+                    <span class="inline-flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 text-emerald-400 text-xs font-semibold px-3 py-1 rounded-full mb-6">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        DESCUBRE NUEVOS MUNDOS LITERARIOS
+                    </span>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-tight">
+                        Donde cada libro es una nueva <span class="text-brand-500">aventura</span>
+                    </h1>
+                    <p class="text-slate-300 text-base md:text-lg mb-8 leading-relaxed">
+                        Explora nuestra colección curada con los mejores títulos de tecnología, ciencia ficción, desarrollo personal y literatura clásica. Encuentra tu próxima gran lectura en Discovery.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="switchTab('catalogo')" class="bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-3 rounded-xl transition flex items-center gap-2 shadow-lg shadow-brand-500/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            Explorar Catálogo
+                        </button>
+                        <button onclick="switchTab('nosotros')" class="bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-white font-semibold px-6 py-3 rounded-xl transition flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Conoce Más
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: CATÁLOGO -->
+        <main id="section-catalogo" class="max-w-7xl mx-auto px-6 py-10">
+            <!-- Header con Buscador y Filtro -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Catálogo de Libros</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Busca por título o filtra por editorial/categoría para encontrar tu próxima lectura.</p>
+                </div>
+
+                <!-- Formulario de Búsqueda -->
+                <form method="GET" action="/" class="flex flex-wrap sm:flex-nowrap gap-3 w-full md:w-auto">
+                    <div class="relative w-full sm:w-64">
+                        <svg class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" name="q" value="{{ request.args.get('q', '') }}" placeholder="Buscar libro..." class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-brand-500 text-slate-800 dark:text-white transition">
+                    </div>
+
+                    <select name="marca" onchange="this.form.submit()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-brand-500 transition">
+                        <option value="">Todas las Categorías</option>
+                        {% for marca in marcas %}
+                            <option value="{{ marca.id }}" {% if request.args.get('marca') == marca.id|string %}selected{% endif %}>{{ marca.nombre }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white px-4 py-2 rounded-xl text-sm font-semibold transition">
+                        Filtrar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Grid de Libros -->
+            {% if productos %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+                    {% for producto in productos %}
+                        <div class="bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="relative">
+                                    <img src="{% if 'Señor' in producto.nombre %}https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600{% elif 'soledad' in producto.nombre %}https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600{% elif 'Harry' in producto.nombre %}https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600{% elif 'Principito' in producto.nombre %}https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=600{% else %}https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=600{% endif %}" 
+                                         alt="{{ producto.nombre }}" 
+                                         class="w-full h-52 object-cover">
+                                    <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                        {{ producto.marca.nombre if producto.marca else 'Editorial' }}
+                                    </span>
+                                </div>
+                                <div class="p-5">
+                                    <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1 line-clamp-1">{{ producto.nombre }}</h3>
+                                    <p class="text-xs text-slate-400 mb-4">Stock disponible: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ producto.stock }} uds.</span></p>
+                                </div>
+                            </div>
+
+                            <div class="p-5 pt-0 flex items-center justify-between border-t border-slate-100 dark:border-slate-700/50 mt-2">
+                                <span class="text-2xl font-black text-brand-600 dark:text-brand-400">${{ "%.2f"|format(producto.precio) }}</span>
+                                <button onclick="addToCart('{{ producto.nombre }}', {{ producto.precio }})" class="bg-brand-50 hover:bg-brand-100 dark:bg-brand-500/10 dark:hover:bg-brand-500/20 text-brand-700 dark:text-brand-400 font-semibold px-4 py-2 rounded-xl text-sm flex items-center gap-1.5 transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                    + Comprar
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-20 bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl">
+                    <p class="text-slate-500 dark:text-slate-400 font-medium mb-4">No se encontraron libros que coincidan con la búsqueda.</p>
+                    <a href="/" class="bg-brand-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition shadow-md">Ver todo el catálogo</a>
+                </div>
+            {% endif %}
+        </main>
+
+        <!-- SECCIÓN: SOBRE NOSOTROS -->
+        <main id="section-nosotros" class="hidden max-w-5xl mx-auto px-6 py-12">
+            <div class="text-left mb-12">
+                <span class="bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Nuestra Filosofía</span>
+                <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Acerca de Librería Discovery</h1>
+                <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed max-w-3xl">
+                    Fundada con la misión de conectar mentes curiosas con el conocimiento infinito de la literatura global y técnica. Creemos que cada página leída es un paso hacia la inspiración, la innovación y el autodescubrimiento.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Nuestra Misión</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Democratizar el acceso a la literatura técnica, científica y recreativa a través de una plataforma digital eficiente y amigable.</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Nuestra Visión</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Ser la librería digital preferida por estudiantes, profesionales y lectores apasionados en toda la región.</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                    <div class="w-12 h-12 bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Valores</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Pasión por la lectura, integridad en el servicio, compromiso con nuestros lectores y mejora continua en cada entrega.</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- SECCIÓN DE RESEÑAS / OPINIONES DE LECTORES -->
+        <section class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-200/80 dark:border-slate-800">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Lo que dicen nuestros lectores</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Descubre por qué miles de amantes de la lectura confían en Discovery.</p>
+            </div>
+
+            <!-- Grid de Reseñas -->
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Reseña 1 -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm italic mb-6">"Encontré excelentes libros técnicos y de programación que no estaban disponibles en otras librerías. El envío fue rapidísimo."</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">CM</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Carla Mendoza</h4>
+                            <p class="text-xs text-slate-400">Desarrolladora Software</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 2 -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm italic mb-6">"La interfaz es bellísima e intuitiva. Comprar novelas de ciencia ficción aquí se convirtió en mi pasatiempo favorito."</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">JR</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Javier Ruiz</h4>
+                            <p class="text-xs text-slate-400">Lector Ávido</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 3 -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm italic mb-6">"Excelente selección de libros de desarrollo personal. La atención al cliente resolvió una duda sobre mi pedido en minutos."</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">LV</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Lucía Vega</h4>
+                            <p class="text-xs text-slate-400">Diseñadora UX</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-6 transition-colors">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <div class="bg-brand-500 text-white p-1 rounded-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <span class="font-bold text-slate-800 dark:text-white text-sm">Librería Discovery</span>
+            </div>
+            <p>© 2026 Librería Discovery. Todos los derechos reservados.  Altamirano Hernández J.A</p>
+        </div>
+    </footer>
+
+    <!-- MODAL: INICIAR SESIÓN -->
+    <div id="modal-login" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+            <h3 class="text-xl font-bold mb-1 text-slate-900 dark:text-white">Iniciar Sesión</h3>
+            <p class="text-xs text-slate-400 mb-4">Accede a tu cuenta en Librería Discovery.</p>
+            
+            <form action="/login" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Correo Electrónico</label>
+                    <input type="email" name="correo" required placeholder="tu@correo.com" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Contraseña</label>
+                    <input type="password" name="password" required placeholder="••••••••" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modal-login').classList.add('hidden')" class="px-4 py-2 text-slate-500 text-sm font-semibold">Cancelar</button>
+                    <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: REGISTRO -->
+    <div id="modal-registro" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+            <h3 class="text-xl font-bold mb-1 text-slate-900 dark:text-white">Crear Cuenta</h3>
+            <p class="text-xs text-slate-400 mb-4">Regístrate para disfrutar de nuestra librería online.</p>
+            
+            <form action="/registro" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Nombre Completo</label>
+                    <input type="text" name="nombre" required placeholder="Ej. Ana Pérez" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Correo Electrónico</label>
+                    <input type="email" name="correo" required placeholder="tu@correo.com" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Contraseña</label>
+                    <input type="password" name="password" required placeholder="••••••••" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modal-registro').classList.add('hidden')" class="px-4 py-2 text-slate-500 text-sm font-semibold">Cancelar</button>
+                    <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition">Registrarse</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: DEJAR OPINIÓN -->
+    <div id="modal-opinion" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+            <h3 class="text-xl font-bold mb-1 text-slate-900 dark:text-white">Dejar una Opinión</h3>
+            <p class="text-xs text-slate-400 mb-4">Comparte tu experiencia de compra en Librería Discovery.</p>
+            
+            <form onsubmit="submitOpinion(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tu Nombre Completo</label>
+                    <input type="text" id="opinion-nombre" required value="{{ session.get('usuario_nombre', '') }}" placeholder="Ej. Carlos Fuentes" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Ocupación / Perfil</label>
+                    <input type="text" id="opinion-rol" required placeholder="Ej. Lector Apasionado, Estudiante" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tu Comentario</label>
+                    <textarea id="opinion-texto" required rows="3" placeholder="Escribe tu opinión sobre el servicio o la plataforma..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="document.getElementById('modal-opinion').classList.add('hidden')" class="px-4 py-2 text-slate-500 text-sm font-semibold">Cancelar</button>
+                    <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition">Publicar Opinión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: RESUMEN CARRITO -->
+    <div id="modal-carrito" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-md w-full p-6 relative shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white flex items-center justify-between">
+                <span>Tu Carrito</span>
+                <span id="cart-modal-count" class="text-xs bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400 px-2.5 py-1 rounded-full">0 artículos</span>
+            </h3>
+            
+            <div id="cart-items" class="max-h-60 overflow-y-auto space-y-3 mb-4 divide-y divide-slate-100 dark:divide-slate-700">
+                <p id="empty-cart-msg" class="text-center text-slate-400 text-sm py-6">Tu bolsa de compras está vacía.</p>
+            </div>
+
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-4 flex justify-between items-center mb-6">
+                <span class="font-bold text-slate-800 dark:text-white">Total:</span>
+                <span id="cart-total" class="text-2xl font-black text-brand-600 dark:text-brand-400">$0.00</span>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="document.getElementById('modal-carrito').classList.add('hidden')" class="px-4 py-2 text-slate-500 text-sm font-semibold">Cerrar</button>
+                <button onclick="checkout()" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2 rounded-xl text-sm transition shadow-md">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN EMERGENTE (Toast) -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white border border-slate-700 px-5 py-3 rounded-2xl shadow-2xl hidden flex items-center gap-3 z-50 text-sm">
+        <span class="text-brand-400 font-bold">✓</span>
+        <span id="toast-msg">Libro agregado</span>
+    </div>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD -->
+    <script>
+        function switchTab(tab) {
+            const sectionHero = document.getElementById('section-hero');
+            const sectionCatalogo = document.getElementById('section-catalogo');
+            const sectionNosotros = document.getElementById('section-nosotros');
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2';
+            });
+
+            if (tab === 'inicio') {
+                sectionHero.classList.remove('hidden');
+                sectionCatalogo.classList.remove('hidden');
+                sectionNosotros.classList.add('hidden');
+                document.getElementById('btn-inicio').className = 'tab-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm flex items-center gap-2';
+            } else if (tab === 'catalogo') {
+                sectionHero.classList.add('hidden');
+                sectionCatalogo.classList.remove('hidden');
+                sectionNosotros.classList.add('hidden');
+                document.getElementById('btn-catalogo').className = 'tab-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm flex items-center gap-2';
+            } else if (tab === 'nosotros') {
+                sectionHero.classList.add('hidden');
+                sectionCatalogo.classList.add('hidden');
+                sectionNosotros.classList.remove('hidden');
+                document.getElementById('btn-nosotros').className = 'tab-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm flex items-center gap-2';
+            }
+        }
+
+        let cart = [];
+        function addToCart(nombre, precio) {
+            cart.push({ nombre, precio });
+            updateCartUI();
+            showToast(`"${nombre}" agregado al carrito.`);
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-counter').innerText = cart.length;
+            document.getElementById('cart-modal-count').innerText = `${cart.length} artículos`;
+            
+            const cartItemsContainer = document.getElementById('cart-items');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p id="empty-cart-msg" class="text-center text-slate-400 text-sm py-6">Tu bolsa de compras está vacía.</p>';
+                document.getElementById('cart-total').innerText = '$0.00';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.precio;
+                html += `
+                    <div class="flex justify-between items-center pt-2">
+                        <div>
+                            <p class="font-bold text-slate-800 dark:text-white text-sm">${item.nombre}</p>
+                            <p class="text-xs text-brand-600 dark:text-brand-400 font-semibold">$${item.precio.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-xs text-rose-500 hover:underline">Quitar</button>
+                    </div>
+                `;
+            });
+            cartItemsContainer.innerHTML = html;
+            document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function openCartModal() {
+            updateCartUI();
+            document.getElementById('modal-carrito').classList.remove('hidden');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Tu carrito está vacío.");
+                return;
+            }
+            alert("¡Gracias por tu compra en Librería Discovery! Tu pedido ha sido procesado con éxito.");
+            cart = [];
+            updateCartUI();
+            document.getElementById('modal-carrito').classList.add('hidden');
+        }
+
+        function submitOpinion(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('opinion-nombre').value;
+            const rol = document.getElementById('opinion-rol').value;
+            const texto = document.getElementById('opinion-texto').value;
+
+            const initials = nombre.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+
+            const newReviewHtml = `
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-sm flex flex-col justify-between animate-fade-in">
+                    <div>
+                        <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm italic mb-6">"${texto}"</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">${initials}</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">${nombre}</h4>
+                            <p class="text-xs text-slate-400">${rol}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('reviews-container').insertAdjacentHTML('afterbegin', newReviewHtml);
+            document.getElementById('modal-opinion').classList.add('hidden');
+            e.target.reset();
+            showToast("¡Gracias! Tu opinión ha sido publicada.");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('theme-toggle-dark-icon').classList.toggle('hidden', !isDark);
+            document.getElementById('theme-toggle-light-icon').classList.toggle('hidden', isDark);
+        }
+    </script>
+</body>
+</html>
